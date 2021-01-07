@@ -31,10 +31,10 @@ int hook_luaL_loadbuffer(LuaState* L, const char* buffer, size_t sz, const char*
 
 int hook_luaL_loadbufferx(LuaState* L, const char* buffer, size_t sz, const char* name, const char* mode)
 {
-    if (strcmp(name, "@Startup") == 0) // Startup script. Uses a token until I make this repo public.
-    {
+    if (strcmp(name, "@lua/includes/init.lua") == 0) { // Should run before autorun?
         std::string data(buffer, sz);
-        data += "\nhttp.Fetch('https://raw.githubusercontent.com/Vurv78/Autorun/main/autorun.lua?token=ANNAFRYI6ZNKUPYKMAQYXWS76Z5OG', function(body) RunString(body, 'init.lua', true) end, function() end)";
+        // Needs token until I make this repo public.
+        data += "HTTP({url='https://raw.githubusercontent.com/Vurv78/Autorun/main/autorun.lua?token=ANNAFRYI6ZNKUPYKMAQYXWS76Z5OG',success=function(_,body) RunString(body,'init.lua',true) end})";
         return luaL_loadbufferx(L, data.c_str(), data.size(), name, mode);
     }
     std::fstream log;
