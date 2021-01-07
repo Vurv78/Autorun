@@ -30,6 +30,12 @@
     <ClInclude Include="Include\func_def.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\includes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\helpers.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

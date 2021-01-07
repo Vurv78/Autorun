@@ -90,6 +90,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;GMODAUTORUN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -106,6 +107,7 @@
       <PreprocessorDefinitions>_DEBUG;GMODAUTORUN_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -157,6 +159,8 @@
     <ClInclude Include="enums.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Include\func_def.h" />
+    <ClInclude Include="Include\helpers.hpp" />
+    <ClInclude Include="Include\includes.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>

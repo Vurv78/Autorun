@@ -1,18 +1,9 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
-#include "Include/detours.h"
-#include <stdio.h>
-
-#include <iostream>
-#include <fstream>
-#include <thread>
-#include <string>
-
-
-#include "Include/enums.h" // LUA_ stuff that is useful.
-#include "Include/func_def.h"
+#include "Include/includes.h"
 
 using std::string;
+using std::filesystem::path;
 
 typedef void LuaState;
 
@@ -31,10 +22,11 @@ lua_pcallFn lua_pcall;
 CreateInterfaceFn CreateInterface;
 MsgFn Msg;
 
+#include "Include/helpers.hpp"
+
 int hook_luaL_loadbuffer(LuaState* L, const char* buffer, size_t sz, const char* name)
 {
-    std::fstream log;
-    log.open((string(name) + ".txt").c_str(), std::ios_base::app);
+    std::fstream log = getSAutorunLog(name);
     log << "LOADBUFFER\nNAME: " << name << "\nBUF: " << buffer << "\n";
     printf("LoadBuffer Call[ Name: %s ]\n", name);
     main_state = L;
@@ -46,11 +38,10 @@ int hook_luaL_loadbufferx(LuaState* L, const char* buffer, size_t sz, const char
     if (strcmp(name, "@lua/includes/init.lua") == 0) { // Should run before autorun?
         string data(buffer, sz);
         // Needs token until I make this repo public.
-        data += "HTTP({url='https://raw.githubusercontent.com/Vurv78/Autorun/main/autorun.lua?token=ANNAFRYI6ZNKUPYKMAQYXWS76Z5OG',success=function(_,body) RunString(body,'init.lua',true) end})";
+        runLua( " print('supercool autorun script.') " ); // Don't read from here. I will find out how to read a file at compile time or something like how rust has a build.rs.
         return luaL_loadbufferx(L, data.c_str(), data.size(), name, mode);
     }
-    std::fstream log;
-    log.open( (string( name ) + ".txt").c_str() , std::ios_base::app);
+    std::fstream log = getSAutorunLog(name);
     log << "LOADBUFFERX\nNAME: " << name << "\nBUF: " << buffer << "\n";
     printf("LoadBufferX Call[ Name: %s ]\n", name);
     main_state = L;
@@ -58,8 +49,7 @@ int hook_luaL_loadbufferx(LuaState* L, const char* buffer, size_t sz, const char
 }
 
 int hook_luaL_loadstring(LuaState* L, const char* buffer) {
-    std::fstream log;
-    log.open("loadstring.txt", std::ios_base::app);
+    std::fstream log = getSAutorunLog("loadstring.txt");
     log << "LOADSTRING\nBUF: " << buffer << "\n";
     printf("Loadstring Call[ Code Length: %d ]\n", strlen(buffer));
     main_state = L;
@@ -83,17 +73,6 @@ void printgm( const char* fmt, ... ) {
     vsprintf_s(buf, (string(fmt) + "\n").c_str(), args);
     va_end(args);
     Msg(buf);
-}
-
-void runLua(const char* code) {
-    if (main_state) {
-        luaL_loadstring(main_state, code);
-        int result = lua_pcall(main_state, NULL, -1, NULL); // LUA_MULTRET = -1
-        printf("Ran lua code. %s\n", LUA_ISERR(result) ? "ERRORED" : "SUCCESS" );
-    }
-    else {
-        printf("Main state not found in runLua call\n");
-    }
 }
 
 // For now, this will only handle executing lua.
