@@ -14,4 +14,4 @@ typedef LuaState*(*CreateInterfaceFn)(void* _, unsigned char state_type, bool re
 typedef void(*MsgFn)(char* buff);
 
 // engine.dll
-//typedef void(*ExecuteClientCmd)(const char* cmd);
+// todo
