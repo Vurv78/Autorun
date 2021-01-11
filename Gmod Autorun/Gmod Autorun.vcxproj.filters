@@ -15,25 +15,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="detours.h">
+    <ClInclude Include="Include\Funcs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="enums.h">
+    <ClInclude Include="Include\ILuaBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\func_def.h">
+    <ClInclude Include="Include\Enums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\includes.h">
+    <ClInclude Include="Include\Mod.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\helpers.hpp">
+    <ClInclude Include="Include\ms_detours.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Helpers.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

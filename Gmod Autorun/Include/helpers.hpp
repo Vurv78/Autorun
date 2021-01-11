@@ -1,18 +1,42 @@
+
+
 void runLua(const char* code) {
     if (main_state) {
-        luaL_loadstring(main_state, code);
-        int result = lua_pcall(main_state, NULL, -1, NULL); // LUA_MULTRET = -1
-        printf("Ran lua code. %s\n", LUA_ISERR(result) ? "ERRORED" : "SUCCESS");
+        const int code_result = luaL_loadstring(main_state, code);
+        if( LUA_ISERR(code_result) ){
+            printf("Lua Code Errored: %s Error\n", code_result == LUA_ERRSYNTAX ? "Syntax" : "Memory");
+            lua_pop(main_state, 1);
+        }else {
+            const int pcall_result = lua_pcall(main_state, 0, 0, 0);
+
+            if (LUA_ISERR(pcall_result)) {
+                printf("Code errored in PCall\n");
+                // I've been trying to fix this for way too long.. for some reason the C API Really doesn't like lua_tostring right now...
+                // and I really don't care anymore... so this message is all you're gonna get.
+                lua_pop(main_state, 1);
+            }
+        }
     }
     else {
         printf("Main state not found in runLua call\n");
     }
 }
 
+// Just prints to gmod console. (It's that white info text so it's pretty hard to notice)
+// Woag!! It's printgm from that one rust repo!!!
+void printgm( const char* fmt, ... ) {
+    char buf[256];
+    va_list args;
+    va_start(args, fmt);
+    vsprintf_s(buf, (string(fmt) + "\n").c_str(), args);
+    va_end(args);
+    Msg(buf);
+}
+
 /*
-Windows: C:/Users/username/Documents/gluasteal/
-Linux: /home/username/gluasteal/
-macOS: /Users/username/gluasteal/
+Windows: C:/Users/username/
+Linux: /home/username/
+macOS: /Users/username/
 */
 
 

@@ -1,6 +1,5 @@
-// dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
-#include "Include/includes.h"
+#include "Include/Mod.h"
 
 using std::string;
 using std::filesystem::path;
@@ -18,6 +17,8 @@ luaL_loadbufferFn luaL_loadbuffer; // Original loadbuffer func
 luaL_loadbufferxFn luaL_loadbufferx;
 luaL_loadstringFn luaL_loadstring;
 lua_pcallFn lua_pcall;
+lua_tostringFn lua_tostring;
+lua_settopFn lua_settop;
 
 CreateInterfaceFn CreateInterface;
 MsgFn Msg;
@@ -37,8 +38,8 @@ int hook_luaL_loadbufferx(LuaState* L, const char* buffer, size_t sz, const char
 {
     if (strcmp(name, "@lua/includes/init.lua") == 0) { // Should run before autorun?
         string data(buffer, sz);
-        // Needs token until I make this repo public.
-        runLua( " print('supercool autorun script.') " ); // Don't read from here. I will find out how to read a file at compile time or something like how rust has a build.rs.
+        // Don't read from here.
+        runLua(" print('supercool autorun script.') ");
         return luaL_loadbufferx(L, data.c_str(), data.size(), name, mode);
     }
     std::fstream log = getSAutorunLog(name);
@@ -64,18 +65,7 @@ LuaState* hook_CreateInterface(void* _this, unsigned char stateType, bool renew)
     return state;
 }
 
-// Just prints to gmod console. (It's that white info text so it's pretty hard to notice)
-// Woag!! It's printgm from that one rust repo!!!
-void printgm( const char* fmt, ... ) {
-    char buf[256];
-    va_list args;
-    va_start(args, fmt);
-    vsprintf_s(buf, (string(fmt) + "\n").c_str(), args);
-    va_end(args);
-    Msg(buf);
-}
-
-// For now, this will only handle executing lua.
+// For now, this will only handle executing lua, but you could definitely customize it to run specific commands like a server crasher :v
 void handleCommands() {
     while (true) {
         string command;
@@ -86,7 +76,8 @@ void handleCommands() {
         if (strcmp(cmd_c, "lua_run") == 0) {
             string code;
             getline(std::cin, code);
-            runLua( code.substr(1).c_str() );
+            std::cout << code.substr(1).c_str() << "\n";
+            runLua(code.substr(1).c_str());
         }
         else if (strcmp(cmd_c, "lua_dofile") == 0) {
             printf("Todo..");
@@ -104,8 +95,7 @@ void Init() {
         luaL_loadbufferxFn _luaL_loadbufferx = (luaL_loadbufferxFn)GetProcAddress(LuaSharedHandle, "luaL_loadbufferx");
         luaL_loadstringFn _luaL_loadstring = (luaL_loadstringFn)GetProcAddress(LuaSharedHandle, "luaL_loadstring");
         CreateInterfaceFn _CreateInterface = (CreateInterfaceFn)GetProcAddress(LuaSharedHandle, "CreateInterface");
-        
-        //ExecuteClientCmd _ExecuteClientCmd = (ExecuteClientCmd)GetProcAddress(EngineHandle, "ExecuteClientCmd");
+
 
         // Debug Console
         AllocConsole();
@@ -115,6 +105,9 @@ void Init() {
 
         // Functions we just want to use, no need to detour. (Well actually there would be a need if we wanted to be undetected..)
         lua_pcall = (lua_pcallFn)GetProcAddress(LuaSharedHandle, "lua_pcall");
+        lua_tostring = (lua_tostringFn)GetProcAddress(LuaSharedHandle, "lua_tostring");
+        lua_settop = (lua_settopFn)GetProcAddress(LuaSharedHandle, "lua_settop");
+
         Msg = (MsgFn)GetProcAddress(Tier0Handle, "Msg");
 
         printf("Successfully loaded all interfaces.\n");
@@ -133,7 +126,6 @@ void Init() {
     }
 
     handleCommands();
-    //std::thread first (handleCommands);
 }
 
 void Exit() {

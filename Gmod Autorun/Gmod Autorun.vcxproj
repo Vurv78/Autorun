@@ -155,12 +155,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="detours.h" />
-    <ClInclude Include="enums.h" />
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="Include\func_def.h" />
-    <ClInclude Include="Include\helpers.hpp" />
-    <ClInclude Include="Include\includes.h" />
+    <ClInclude Include="Include\Enums.h" />
+    <ClInclude Include="Include\Funcs.h" />
+    <ClInclude Include="Include\Helpers.hpp" />
+    <ClInclude Include="Include\ILuaBase.h" />
+    <ClInclude Include="Include\Mod.h" />
+    <ClInclude Include="Include\ms_detours.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>

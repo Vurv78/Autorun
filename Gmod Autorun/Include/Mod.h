@@ -6,6 +6,9 @@
 #include <string>
 #include <filesystem>
 
-#include "detours.h"
-#include "enums.h"
-#include "func_def.h"
+// Microsoft Detours v1.5
+#include "ms_detours.h"
+
+#include "Enums.h"
+#include "Funcs.h"
+#include "ILuaBase.h"
