@@ -1,5 +1,6 @@
 # Autorun
 Simple, Small script that I autorun for gmod.
+I made this as a learning experience and to make a smaller version of https://github.com/lewisclark/glua-steal. (That repo is pretty large for what little it does..)
 
 ## Features:
 - Basic lua dumping (hooked loadbuffer, loadbufferx, loadstring)
