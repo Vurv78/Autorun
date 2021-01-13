@@ -37,10 +37,8 @@ int hook_luaL_loadbuffer(LuaState* L, const char* buffer, size_t sz, const char*
 int hook_luaL_loadbufferx(LuaState* L, const char* buffer, size_t sz, const char* name, const char* mode)
 {
     if (strcmp(name, "@lua/includes/init.lua") == 0) { // Should run before autorun?
-        string data(buffer, sz);
         // Don't read from here.
-        runLua(" print('supercool autorun script.') ");
-        return luaL_loadbufferx(L, data.c_str(), data.size(), name, mode);
+        runLua(" print('Hooked luaL_loadbufferx.') ");
     }
     std::fstream log = getSAutorunLog(name);
     log << "LOADBUFFERX\nNAME: " << name << "\nBUF: " << buffer << "\n";
