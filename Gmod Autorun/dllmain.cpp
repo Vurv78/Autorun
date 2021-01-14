@@ -20,7 +20,6 @@ lua_pcallFn lua_pcall;
 lua_tostringFn lua_tostring;
 lua_settopFn lua_settop;
 
-CreateInterfaceFn CreateInterface;
 MsgFn Msg;
 
 #include "Include/helpers.hpp"
@@ -53,14 +52,6 @@ int hook_luaL_loadstring(LuaState* L, const char* buffer) {
     printf("Loadstring Call[ Code Length: %d ]\n", strlen(buffer));
     main_state = L;
     return luaL_loadstring(L, buffer);
-}
-
-// Function that creates a lua state.
-LuaState* hook_CreateInterface(void* _this, unsigned char stateType, bool renew) {
-    LuaState* state = CreateInterface(_this, stateType, renew);
-    main_state = state;
-    printf("CreateInterface Call, set main state!\n");
-    return state;
 }
 
 // For now, this will only handle executing lua, but you could definitely customize it to run specific commands like a server crasher :v
@@ -117,7 +108,6 @@ void Init() {
         luaL_loadbuffer = (luaL_loadbufferFn)DetourFunction((PBYTE)_luaL_loadbuffer, (PBYTE)hook_luaL_loadbuffer);
         luaL_loadbufferx = (luaL_loadbufferxFn)DetourFunction((PBYTE)_luaL_loadbufferx, (PBYTE)hook_luaL_loadbufferx);
         luaL_loadstring = (luaL_loadstringFn)DetourFunction((PBYTE)_luaL_loadstring, (PBYTE)hook_luaL_loadstring);
-        CreateInterface = (CreateInterfaceFn)DetourFunction((PBYTE)_CreateInterface, (PBYTE)hook_CreateInterface);
     }
     else {
         MessageBox(0, "ERROR!", "LUASHAREDHANDLE IS NULL!", 0);
