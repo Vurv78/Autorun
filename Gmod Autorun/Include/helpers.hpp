@@ -11,8 +11,8 @@ void runLua(const char* code) {
 
             if (LUA_ISERR(pcall_result)) {
                 printf("Code errored in PCall\n");
-                // I've been trying to fix this for way too long.. for some reason the C API Really doesn't like lua_tostring right now...
-                // and I really don't care anymore... so this message is all you're gonna get.
+                // I've been trying to fix this for way too long.. for some reason the C API Really doesn't like lua_tostring right now
+                // and I really don't care anymore, so this message is all you're gonna get.
                 lua_pop(main_state, 1);
             }
         }
@@ -64,7 +64,8 @@ path sanitizeLuaPath(const char* garry_path) {
         pos += 2;
     }
     path ret = haystack;
-    ret = ret.has_filename() ? ret : (ret / ".txt"); // If no filename, default to .txt (Doesn't work??)
+    if (!ret.has_extension()) // Default file extension: .txt
+        ret.replace_extension("txt");
     return ret;
 }
 
@@ -72,7 +73,7 @@ path sanitizeLuaPath(const char* garry_path) {
 std::fstream getSAutorunLog(const char* garry_path) {
     // Assuming the garry path still has the @ in it.
     std::fstream new_log;
-    path the_path = getHomeDir() / "sautorun" / sanitizeLuaPath(garry_path);
+    path the_path = getHomeDir() / "sautorun" / "logs" / sanitizeLuaPath(garry_path);
     path file_name = the_path.filename();
     std::filesystem::create_directories(the_path.remove_filename());
     new_log.open(the_path / file_name, std::ios_base::app); // Append to file.

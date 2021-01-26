@@ -19,6 +19,7 @@ luaL_loadstringFn luaL_loadstring;
 lua_pcallFn lua_pcall;
 lua_tostringFn lua_tostring;
 lua_settopFn lua_settop;
+bool has_init;
 
 MsgFn Msg;
 
@@ -35,9 +36,10 @@ int hook_luaL_loadbuffer(LuaState* L, const char* buffer, size_t sz, const char*
 
 int hook_luaL_loadbufferx(LuaState* L, const char* buffer, size_t sz, const char* name, const char* mode)
 {
-    if (strcmp(name, "@lua/includes/init.lua") == 0) { // Should run before autorun?
-        // Don't read from here.
-        runLua(" print('Hooked luaL_loadbufferx.') ");
+    if (strcmp(name, "@lua/includes/init.lua") == 0) {
+        if (!has_init)
+            has_init = true;
+            runLua(" print('Hooked luaL_loadbufferx.') ");
     }
     std::fstream log = getSAutorunLog(name);
     log << "LOADBUFFERX\nNAME: " << name << "\nBUF: " << buffer << "\n";
