@@ -2,7 +2,8 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Simple, Small script that I autorun for gmod.
-I made this as a learning experience and to make a smaller version of https://github.com/lewisclark/glua-steal. (That repo is pretty large for what little it does..)
+I made this as a learning experience and to make a smaller version of https://github.com/lewisclark/glua-steal. (That repo is pretty large for what little it does..)  
+If you want a more maintained version in Rust with more features alongside pre-built dlls, see: https://github.com/Vurv78/Autorun-rs. (Also much easier to build yourself thanks to cargo.)
 
 ## Features:
 - Basic lua dumping (hooked loadbuffer, loadbufferx, loadstring)
